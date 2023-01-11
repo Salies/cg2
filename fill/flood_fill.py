@@ -6,8 +6,6 @@ im = Image.open('Testar_FloodFill.bmp').convert('L')
 m = np.array(im)
 
 def flood_fill(img, x, y, paint_color, target_color):
-    img[x, y] = paint_color
-
     stack = [(x, y)]
     while stack:
         x, y = stack.pop()
