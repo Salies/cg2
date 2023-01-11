@@ -1,6 +1,5 @@
 import numpy as np
 from PIL import Image
-import sys
 
 im = Image.open('Testar_FloodFill.bmp').convert('RGB')
 m = np.array(im)
