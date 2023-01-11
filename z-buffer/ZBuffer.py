@@ -11,11 +11,13 @@ class ZBuffer:
         self.buffer = np.full((x, y), np.inf, dtype=np.float32)
     
     def set_point(self, x, y, z, color):
-        x, y = x + self.offset, y + self.offset
-        if z >= self.buffer[x, y]:
+        x, y = x + self.offset, self.offset - y
+        # Invertendo x e y pois os objetos são dados em
+        # um plano cartesiano, mas aqui trata-se de uma imagem.
+        if z >= self.buffer[y, x]:
             return
-        self.buffer[x, y] = z
-        self.mm[x, y] = color
+        self.buffer[y, x] = z
+        self.mm[y, x] = color
 
     def save(self, filename):
         im = Image.fromarray(self.mm)

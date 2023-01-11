@@ -64,4 +64,7 @@ for x in range(-20, 21):
         zb.set_point(20, x, y, (255, 255, 255))
         zb.set_point(-20, x, y, (255, 255, 255))
 
+# purple
+zb.set_point(10, 100, 5, (255, 0, 255))
+
 zb.save('z-buffer.png')
