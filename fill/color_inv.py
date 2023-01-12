@@ -12,7 +12,7 @@ edges = [
 
 # Definindo o bounding-box
 # x-min, y-min, x-max, y-max
-bb = [(14, 35), (184, 165)]
+bb = [(12, 30), (184, 184)]
 
 # For each edge, draw a line
 im = Image.new('RGB', (200, 200), (250, 218, 94))
@@ -35,7 +35,9 @@ for edge in edges:
         # because the line may not be fully vertical
         x = np.round(x1 + (x2 - x1) * (y - y1) / (y2 - y1)).astype(int)
         # Invert every pixel to the right of the edge
-        for x in range(x, 200):
+        # No need to go until the max x, since the bounding box
+        # will take care of that
+        for x in range(x, bb[1][0] + 1):
             r, g, b = im.getpixel((x, y))
             im.putpixel((x, y), (255 - r, 255 - g, 255 - b))
 
@@ -44,7 +46,3 @@ for edge in edges:
     draw.line(edge, fill=(0, 0, 0), width=1)
 
 im.show()
-
-x_min, y_min = bb[0]
-x_max, y_max = bb[1]
-
