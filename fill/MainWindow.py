@@ -1,8 +1,9 @@
 from edge_fill import EdgeFill
 from flood_fill import flood_fill, flood_fill_eight
-from PySide6.QtWidgets import QMainWindow, QRadioButton, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
-from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QMainWindow, QColorDialog, QRadioButton, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
+from PySide6.QtGui import QPixmap, QColor
 from PIL import ImageQt, Image
+import numpy as np
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -15,6 +16,11 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.buildFloodFillWidget()
         self.buildEdgeFillWidget()
+
+    def floodfill_drawimage(self):
+        imQt = ImageQt.ImageQt(self.floodfill_im)
+        pixmap = QPixmap.fromImage(imQt)
+        self.floodfill_imgLabel.setPixmap(pixmap)
 
     # Função para construir widget to floodfill
     def buildFloodFillWidget(self):
@@ -29,11 +35,19 @@ class MainWindow(QMainWindow):
         floodFillLayout.addWidget(v8, 0, 1)
         # Carregando imagem padrão
         self.floodfill_imgLabel = QLabel()
-        im = Image.open('img/Testar_FloodFill.bmp')
-        imQt = ImageQt.ImageQt(im)
-        pixmap = QPixmap.fromImage(imQt)
-        self.floodfill_imgLabel.setPixmap(pixmap)
+        self.floodfill_im = Image.open('img/Testar_FloodFill.bmp')
+        self.floodfill_drawimage()
         floodFillLayout.addWidget(self.floodfill_imgLabel, 1, 0, 1, 2)
+        # Botão de mudar de cor e de redesenhar
+        changeColorButton = QPushButton('Escolher cor')
+        self.floodFillColor = (255, 0, 0)
+        changeColorButton.clicked.connect(self.floodfill_change_color)
+        floodFillLayout.addWidget(changeColorButton, 2, 0)
+        floodFillButton = QPushButton('Reiniciar')
+        #floodFillButton.clicked.connect(self.floodfill_fill)
+        floodFillLayout.addWidget(floodFillButton, 2, 1)
+        # Evento para quando o usuário clicar na imagem do flood fill
+        self.floodfill_imgLabel.mousePressEvent = self.floodfill_fill
         floodFillWidget.setLayout(floodFillLayout)
         self.centralLayout.addWidget(floodFillWidget)
 
@@ -54,7 +68,7 @@ class MainWindow(QMainWindow):
         # label para o botão de floodfill
         edgeFillButton = QPushButton('Preencher')
         edgeFillButton.clicked.connect(self.edgefill_fill)
-        edgeFillLayout.addWidget(edgeFillButton, 1, 0, 1, 2)
+        edgeFillLayout.addWidget(edgeFillButton, 1, 0, 1, 2)        
         edgeFillWidget.setLayout(edgeFillLayout)
         self.centralLayout.addWidget(edgeFillWidget)
 
@@ -64,3 +78,18 @@ class MainWindow(QMainWindow):
         imQt = ImageQt.ImageQt(im)
         pixmap = QPixmap.fromImage(imQt)
         self.edgefill_imgLabel.setPixmap(pixmap)
+
+    def floodfill_change_color(self):
+        colorDiag = QColorDialog()
+        colorDiag.setCurrentColor(QColor(*self.floodFillColor))
+        if colorDiag.exec():
+            self.floodFillColor = colorDiag.currentColor().getRgb()[:3]
+
+    def floodfill_fill(self, event):
+        img_a = np.array(self.floodfill_im)
+        x = event.pos().x()
+        y = event.pos().y()
+        color_at_pos = tuple(img_a[y, x])
+        flood_fill(img_a, y, x, self.floodFillColor, color_at_pos)
+        self.floodfill_im = Image.fromarray(img_a)
+        self.floodfill_drawimage()
