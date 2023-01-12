@@ -35,7 +35,8 @@ class MainWindow(QMainWindow):
         floodFillLayout.addWidget(v8, 0, 1)
         # Carregando imagem padrão
         self.floodfill_imgLabel = QLabel()
-        self.floodfill_im = Image.open('img/Testar_FloodFill.bmp')
+        self.floodfill_im_og = Image.open('img/Testar_FloodFill.bmp')
+        self.floodfill_im = self.floodfill_im_og
         self.floodfill_drawimage()
         floodFillLayout.addWidget(self.floodfill_imgLabel, 1, 0, 1, 2)
         # Botão de mudar de cor e de redesenhar
@@ -43,9 +44,9 @@ class MainWindow(QMainWindow):
         self.floodFillColor = (255, 0, 0)
         changeColorButton.clicked.connect(self.floodfill_change_color)
         floodFillLayout.addWidget(changeColorButton, 2, 0)
-        floodFillButton = QPushButton('Reiniciar')
-        #floodFillButton.clicked.connect(self.floodfill_fill)
-        floodFillLayout.addWidget(floodFillButton, 2, 1)
+        floodfill_resetbutton = QPushButton('Reiniciar')
+        floodfill_resetbutton.clicked.connect(self.floodfill_reset)
+        floodFillLayout.addWidget(floodfill_resetbutton, 2, 1)
         # Evento para quando o usuário clicar na imagem do flood fill
         self.floodfill_imgLabel.mousePressEvent = self.floodfill_fill
         floodFillWidget.setLayout(floodFillLayout)
@@ -92,4 +93,8 @@ class MainWindow(QMainWindow):
         color_at_pos = tuple(img_a[y, x])
         flood_fill(img_a, y, x, self.floodFillColor, color_at_pos)
         self.floodfill_im = Image.fromarray(img_a)
+        self.floodfill_drawimage()
+
+    def floodfill_reset(self):
+        self.floodfill_im = self.floodfill_im_og
         self.floodfill_drawimage()
