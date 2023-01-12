@@ -7,7 +7,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Preenchimento de polígonos')
-        self.resize(600, 300)
         self.edgeFill = EdgeFill()
         self.centralLayout = QHBoxLayout()
         self.centralWidget = QWidget()
@@ -15,11 +14,6 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.buildFloodFillWidget()
         self.buildEdgeFillWidget()
-    
-    # Carregando os arquivos de imagens
-    # no caso do edge fill, é necessário construir a imagem
-    def loadImages(self):
-        pass
 
     # Função para construir widget to floodfill
     def buildFloodFillWidget(self):
