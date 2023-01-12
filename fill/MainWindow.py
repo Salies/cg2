@@ -1,7 +1,8 @@
 from edge_fill import EdgeFill
+from flood_fill import flood_fill, flood_fill_eight
 from PySide6.QtWidgets import QMainWindow, QRadioButton, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
 from PySide6.QtGui import QPixmap
-from PIL import ImageQt
+from PIL import ImageQt, Image
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,7 +27,13 @@ class MainWindow(QMainWindow):
         v4.setChecked(True)
         floodFillLayout.addWidget(v4, 0, 0)
         floodFillLayout.addWidget(v8, 0, 1)
-        
+        # Carregando imagem padrão
+        self.floodfill_imgLabel = QLabel()
+        im = Image.open('img/Testar_FloodFill.bmp')
+        imQt = ImageQt.ImageQt(im)
+        pixmap = QPixmap.fromImage(imQt)
+        self.floodfill_imgLabel.setPixmap(pixmap)
+        floodFillLayout.addWidget(self.floodfill_imgLabel, 1, 0, 1, 2)
         floodFillWidget.setLayout(floodFillLayout)
         self.centralLayout.addWidget(floodFillWidget)
 
@@ -47,7 +54,7 @@ class MainWindow(QMainWindow):
         # label para o botão de floodfill
         edgeFillButton = QPushButton('Preencher')
         edgeFillButton.clicked.connect(self.edgefill_fill)
-        edgeFillLayout.addWidget(edgeFillButton, 1, 0, 1, 1)
+        edgeFillLayout.addWidget(edgeFillButton, 1, 0, 1, 2)
         edgeFillWidget.setLayout(edgeFillLayout)
         self.centralLayout.addWidget(edgeFillWidget)
 
