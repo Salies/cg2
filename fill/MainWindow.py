@@ -30,35 +30,26 @@ class MainWindow(QMainWindow):
         edgeFillWidget = QGroupBox('Inversão de cores')
         edgeFillLayout = QGridLayout()
         # label para image
-        self.imgLabel = QLabel()
+        self.edgefill_imgLabel = QLabel()
         # carrega a imagem padrão
-        im = self.edgeFill.redraw()
+        im = self.edgeFill.get_img()
         # converte a imagem de pillow pra qt
         imQt = ImageQt.ImageQt(im)
         # converte a imagem de qt pra pixmap
         pixmap = QPixmap.fromImage(imQt)
         # seta a imagem no label
-        self.imgLabel.setPixmap(pixmap)
-        edgeFillLayout.addWidget(self.imgLabel, 0, 0, 1, 2)
+        self.edgefill_imgLabel.setPixmap(pixmap)
+        edgeFillLayout.addWidget(self.edgefill_imgLabel, 0, 0, 1, 2)
         # label para o botão de floodfill
         edgeFillButton = QPushButton('Preencher')
         edgeFillButton.clicked.connect(self.edgefill_fill)
-        edgeFillLayout.addWidget(edgeFillButton, 1, 1)
-        # label para o botão de redraw
-        redrawButton = QPushButton('Redesenhar')
-        redrawButton.clicked.connect(self.edgefill_redraw)
-        edgeFillLayout.addWidget(redrawButton, 1, 0)
+        edgeFillLayout.addWidget(edgeFillButton, 1, 0, 1, 1)
         edgeFillWidget.setLayout(edgeFillLayout)
         self.centralLayout.addWidget(edgeFillWidget)
-    
-    def edgefill_redraw(self):
-        im = self.edgeFill.redraw()
-        imQt = ImageQt.ImageQt(im)
-        pixmap = QPixmap.fromImage(imQt)
-        self.imgLabel.setPixmap(pixmap)
-        
+
     def edgefill_fill(self):
-        im = self.edgeFill.fill()
+        self.edgeFill.fill()
+        im = self.edgeFill.get_img()
         imQt = ImageQt.ImageQt(im)
         pixmap = QPixmap.fromImage(imQt)
-        self.imgLabel.setPixmap(pixmap)
+        self.edgefill_imgLabel.setPixmap(pixmap)

@@ -16,19 +16,17 @@ class EdgeFill:
         # x-min, y-min, x-max, y-max
         self.bb = [(12, 30), (184, 184)]
 
-    def _draw_edges(self, im):
+        # Desenha a imagem base
+        self.base_im = Image.new('RGB', (200, 200), (250, 218, 94))
+
+    def get_img(self):
+        im = self.base_im.copy()
         draw = ImageDraw.Draw(im)
         for edge in self.edges:
             draw.line(edge, fill=(0, 0, 0), width=1)
-
-
-    def redraw(self):
-        im = Image.new('RGB', (200, 200), (250, 218, 94))
-        self._draw_edges(im)
         return im
 
     def fill(self):
-        im = Image.new('RGB', (200, 200), (250, 218, 94))
         for edge in self.edges:
             x1, y1 = edge[0]
             x2, y2 = edge[1]
@@ -45,7 +43,5 @@ class EdgeFill:
                 # No need to go until the max x, since the bounding box
                 # will take care of that
                 for x in range(x, self.bb[1][0] + 1):
-                    r, g, b = im.getpixel((x, y))
-                    im.putpixel((x, y), (255 - r, 255 - g, 255 - b))
-        self._draw_edges(im)
-        return im
+                    r, g, b = self.base_im.getpixel((x, y))
+                    self.base_im.putpixel((x, y), (255 - r, 255 - g, 255 - b))
