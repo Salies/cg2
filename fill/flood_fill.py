@@ -1,8 +1,4 @@
 import numpy as np
-from PIL import Image
-
-im = Image.open('Testar_FloodFill.bmp').convert('RGB')
-m = np.array(im)
 
 def flood_fill(img, xo, yo, paint_color, target_color):
     if paint_color == target_color:
@@ -59,6 +55,3 @@ def flood_fill_eight(img, xo, yo, paint_color, target_color):
         if x < img.shape[0]-1 and y < img.shape[1]-1 and np.array_equal(img[x+1, y+1], target_color):
             img[x+1, y+1] = paint_color
             stack.append((x+1, y+1))
-
-flood_fill_eight(m, 100, 60, [255, 100, 0], [255, 255, 255])
-Image.fromarray(m).show()

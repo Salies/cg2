@@ -1,5 +1,5 @@
 from edge_fill import EdgeFill
-from PySide6.QtWidgets import QMainWindow, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QMainWindow, QRadioButton, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
 from PySide6.QtGui import QPixmap
 from PIL import ImageQt
 
@@ -18,6 +18,16 @@ class MainWindow(QMainWindow):
     # Função para construir widget to floodfill
     def buildFloodFillWidget(self):
         floodFillWidget = QGroupBox('Flood fill')
+        floodFillLayout = QGridLayout()
+        # Primeira linha, duas colunas do grid com os radio buttons
+        # "Vizinhança-4" e "Vizinhança-8"
+        v4 = QRadioButton('Vizinhança-4')
+        v8 = QRadioButton('Vizinhança-8')
+        v4.setChecked(True)
+        floodFillLayout.addWidget(v4, 0, 0)
+        floodFillLayout.addWidget(v8, 0, 1)
+        
+        floodFillWidget.setLayout(floodFillLayout)
         self.centralLayout.addWidget(floodFillWidget)
 
     def buildEdgeFillWidget(self):
