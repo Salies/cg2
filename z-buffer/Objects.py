@@ -46,7 +46,7 @@ def build_objects():
     for a in np.linspace(0, 2 * np.pi, 620):
         for t in range(0, 51):
             x, y, z = cilinder(t, a)
-            x, y = int(np.round(x)), int(np.round(y))
+            x, y = np.round(x), np.round(y)
             cilinder_points.append((x, y, z))
     cilinder_points = list(set(cilinder_points))
     for x, y, z in cilinder_points:
@@ -58,7 +58,7 @@ def build_objects():
     for a in np.linspace(0, 2 * np.pi, 200):
         for b in np.linspace(0, np.pi, 200):
             x, y, z = sphere(a, b)
-            x, y = int(np.round(x)), int(np.round(y))
+            x, y = np.round(x), np.round(y)
             sphere_points.append((x, y, z))
     # Retira possíveis pontos repetidos, para economizar
     # no desenho depois.
@@ -97,9 +97,12 @@ class Objects:
     def to_img(self):
         # Cria um Z-Buffer
         zb = ZBuffer((300, 300), 150)
+        # Desconsidera a última coluna, que é a coluna de 1's das coordenadas homogêneas
+        points = self.points[:, :-1]
         # Desenha os objetos na imagem, ponto a ponto
-        for i in range(len(self.points)):
-            x, y, z = self.points[i]
+        for i in range(len(points)):
+            x, y, z = points[i]
+            x, y = np.round(x).astype(int), np.round(y).astype(int)
             color = self.colors[i]
             zb.set_point(x, y, z, color)
         # Retorna a imagem
