@@ -14,7 +14,8 @@ class ZBuffer:
         x, y = x + self.offset, self.offset - y
         # Invertendo x e y pois os objetos são dados em
         # um plano cartesiano, mas aqui trata-se de uma imagem.
-        if x > 300 or y < 0:
+        # Checando se o ponto está dentro da imagem
+        if x < 0 or x > 299 or y < 0 or y > 299:
             return
 
         if z >= self.buffer[y, x]:
