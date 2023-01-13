@@ -22,6 +22,6 @@ class ZBuffer:
         self.buffer[y, x] = z
         self.mm[y, x] = color
 
-    def save(self, filename):
+    def to_img(self):
         im = Image.fromarray(self.mm)
-        im.save(filename)
+        return im

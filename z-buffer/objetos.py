@@ -85,9 +85,7 @@ T = np.array([
     [0, 0, 0, 1]
 ])
 
-#print(points.shape)
-
-points = np.c_[points, np.ones(36563)].astype(int)
+points = np.c_[points, np.ones(points.shape[0])].astype(int)
 
 points = np.round(points @ T).astype(int)
 
