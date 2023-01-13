@@ -28,10 +28,10 @@ class MainWindow(QMainWindow):
         floodFillLayout = QGridLayout()
         # Primeira linha, duas colunas do grid com os radio buttons
         # "Vizinhança-4" e "Vizinhança-8"
-        v4 = QRadioButton('Vizinhança-4')
+        self.v4 = QRadioButton('Vizinhança-4')
         v8 = QRadioButton('Vizinhança-8')
-        v4.setChecked(True)
-        floodFillLayout.addWidget(v4, 0, 0)
+        self.v4.setChecked(True)
+        floodFillLayout.addWidget(self.v4, 0, 0)
         floodFillLayout.addWidget(v8, 0, 1)
         # Carregando imagem padrão
         self.floodfill_imgLabel = QLabel()
@@ -91,7 +91,10 @@ class MainWindow(QMainWindow):
         x = event.pos().x()
         y = event.pos().y()
         color_at_pos = tuple(img_a[y, x])
-        flood_fill(img_a, y, x, self.floodFillColor, color_at_pos)
+        if self.v4.isChecked():
+            flood_fill(img_a, y, x, self.floodFillColor, color_at_pos)
+        else:
+            flood_fill_eight(img_a, y, x, self.floodFillColor, color_at_pos)
         self.floodfill_im = Image.fromarray(img_a)
         self.floodfill_drawimage()
 
