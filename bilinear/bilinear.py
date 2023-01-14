@@ -16,10 +16,10 @@ def bilinear(p00, p01, p10, p11):
     # arrendodamos seus valores e retiramos os pontos duplicados.
     points = np.array(points)
     # Arredonda apenas os valores de x e y
-    points[:, 0] = np.round(points[:, 0])
-    points[:, 1] = np.round(points[:, 1])
+    #points[:, 0] = np.round(points[:, 0])
+    #points[:, 1] = np.round(points[:, 1])
     # Remove duplicados
-    points = np.unique(points, axis=0)
+    #points = np.unique(points, axis=0)
     return points
 
 # Uma versão ligeiramente modificada da classe ZBuffer
@@ -54,21 +54,21 @@ class ZBuffer:
 # Classe para construção dos objetos e geração da imagem
 class Ramp:
     def __init__(self):
-        # Verde (baixo)
+        # Verde (baixo) ok
         gd = [
             [0, 0, 0],
             [20, 0, 0],
-            [0, 20, 0],
-            [20, 20, 0]
+            [0, 40, 0],
+            [20, 40, 0]
         ]
-        # Verde (cima)
+        # Verde (cima) ok
         gu = [
             [0, 0, 80],
             [20, 0, 80],
             [0, 40, 80],
             [20, 40, 80]
         ]
-        # Verde (frente)
+        # Verde (frente) ok
         gf = [
             [0, 0, 0],
             [20, 0, 0],
@@ -84,7 +84,7 @@ class Ramp:
         ]
         # Amarelo
         yl = [
-            [20, 40, 0],
+            [20, 0, 0],
             [20, 40, 0],
             [20, 0, 80],
             [20, 40, 80]
@@ -104,16 +104,16 @@ class Ramp:
             [120, 40, 0]
         ]
         # Monta um matriz com os pontos básicos (antes do processamento de superfície bilinear)
-        basic_points = np.array([rd, gd, gu, gf, az, yl, br])
+        basic_points = np.array([rd, az, yl, br, gd, gu, gf])
         # Neste vetor temos as cores de cada um, para passar ao ZBuffer depois.
         basic_colors = np.array([
             [255, 0, 0],
-            [0, 255, 0],
-            [0, 255, 0],
-            [0, 255, 0],
             [0, 0, 255],
             [255, 255, 0],
-            [150, 75, 0]
+            [150, 75, 0],
+            [0, 255, 0],
+            [0, 255, 0],
+            [0, 255, 0]
         ])
         points = []
         colors = []
@@ -167,7 +167,3 @@ class Ramp:
             [0, 0, 0, 1]
         ])
         self.points = self.points @ T
-
-a = Ramp()
-a.rotate_x(np.pi / 12)
-a.to_img().show()
