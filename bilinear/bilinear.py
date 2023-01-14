@@ -136,9 +136,29 @@ class Ramp:
         # Retorna a imagem
         return z.to_img()
 
-    def test(self):
-        pprint.pprint(self.points.shape)
-        pprint.pprint(self.colors.shape)
+    def rotate_x(self, deg):
+        T = np.array([
+            [1, 0, 0],
+            [0, np.cos(deg), -np.sin(deg)],
+            [0, np.sin(deg), np.cos(deg)]
+        ])
+        self.points = self.points @ T
+
+    def rotate_y(self, deg):
+        T = np.array([
+            [np.cos(deg), 0, np.sin(deg)],
+            [0, 1, 0],
+            [-np.sin(deg), 0, np.cos(deg)]
+        ])
+        self.points = self.points @ T
+
+    def rotate_z(self, deg):
+        T = np.array([
+            [np.cos(deg), -np.sin(deg), 0],
+            [np.sin(deg), np.cos(deg), 0],
+            [0, 0, 1]
+        ])
+        self.points = self.points @ T
 
 
 
