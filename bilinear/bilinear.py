@@ -12,15 +12,7 @@ def bilinear(p00, p01, p10, p11):
         for v in np.arange(0, 1, 0.01):
             p = p00 * (1 - u) * (1 - v) + p01 * (1 - u) * v + p10 * u * (1 - v) + p11 * u * v
             points.append(p)
-    # Como x e y precisam ser inteiros para serem usados como índices,
-    # arrendodamos seus valores e retiramos os pontos duplicados.
-    points = np.array(points)
-    # Arredonda apenas os valores de x e y
-    #points[:, 0] = np.round(points[:, 0])
-    #points[:, 1] = np.round(points[:, 1])
-    # Remove duplicados
-    #points = np.unique(points, axis=0)
-    return points
+    return np.array(points)
 
 # Uma versão ligeiramente modificada da classe ZBuffer
 class ZBuffer:
