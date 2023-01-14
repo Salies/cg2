@@ -26,8 +26,8 @@ def bilinear(p00, p01, p10, p11):
 class ZBuffer:
     def __init__(self, size, offsetX, offsetY) -> None:
         self.sizeX, self.sizeY = size
-        self.offsetx = offsetX
-        self.offsety = offsetY
+        self.offsetX = offsetX
+        self.offsetY = offsetY
         # Matriz da imagem
         self.mm = np.zeros((self.sizeX, self.sizeY, 3), dtype=np.uint8)
         # Matriz do Z-Buffer -- float 32 me parece ser o suficiente
@@ -35,6 +35,7 @@ class ZBuffer:
     
     def set_point(self, x, y, z, color):
         x, y = x + self.offsetX, self.offsetY - y
+        x, y = np.round(x).astype(int), np.round(y).astype(int)
         # Invertendo x e y pois os objetos são dados em
         # um plano cartesiano, mas aqui trata-se de uma imagem.
         # Checando se o ponto está dentro da imagem
@@ -103,26 +104,47 @@ class Ramp:
             [120, 40, 0]
         ]
         # Monta um matriz com os pontos básicos (antes do processamento de superfície bilinear)
-        basic_points = np.array([gd, gu, gf, az, yl, rd, br])
-        # Neste vetor temos as cores de cada um, para montar uma estrutura de dados
-        # mais fácil de ser processada.
-        colors = [
+        basic_points = np.array([rd, gd, gu, gf, az, yl, br])
+        # Neste vetor temos as cores de cada um, para passar ao ZBuffer depois.
+        basic_colors = np.array([
+            [255, 0, 0],
             [0, 255, 0],
             [0, 255, 0],
             [0, 255, 0],
             [0, 0, 255],
             [255, 255, 0],
-            [255, 0, 0],
             [150, 75, 0]
-        ]
-        # Agora processa cada um deles, e coloca num dict com cor e pontos
-        self.points = [{'color': colors[i], 'points': bilinear(*basic_points[i])} for i in range(len(basic_points))]
+        ])
+        points = []
+        colors = []
+        # Para cada um desses, "expandimos" eles com a função bilinear e multiplicamos a quantidade de
+        # pontos obtidas pelas cores, para ter a qtd. equivalente de pontos com cores.
+        for i in range(len(basic_points)):
+            b = bilinear(*basic_points[i])
+            points.extend(b)
+            colors.extend([basic_colors[i]] * len(b))
+        # Converte para numpy array
+        self.points = np.array(points)
+        self.colors = np.array(colors)
+
+    def to_img(self):
+        # Cria o ZBuffer
+        z = ZBuffer((400, 400), 200, 200)
+        # Para cada ponto, passa para o ZBuffer
+        for i in range(len(self.points)):
+            z.set_point(*self.points[i], self.colors[i])
+        # Retorna a imagem
+        return z.to_img()
 
     def test(self):
-        pprint.pprint(self.points)
+        pprint.pprint(self.points.shape)
+        pprint.pprint(self.colors.shape)
+
+
 
 t = Ramp()
-t.test()
+im = t.to_img()
+im.show()
 
 '''
 # Teste
