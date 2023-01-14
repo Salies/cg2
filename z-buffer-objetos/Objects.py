@@ -14,7 +14,7 @@ def plane(x, y):
 
 # amarelo
 @njit
-def cilinder(t, a):
+def cone(t, a):
     return 30 + np.cos(a) * t, 50 + np.sin(a) * t, 10 + t
 
 # verde
@@ -41,15 +41,15 @@ def build_objects():
             points.append((x, y, plane(x, y)))
             colors.append((255, 0, 0))
 
-    # Cilindro amarelo
-    cilinder_points = []
+    # Cone amarelo
+    cone_points = []
     for a in np.linspace(0, 2 * np.pi, 620):
         for t in range(0, 51):
-            x, y, z = cilinder(t, a)
+            x, y, z = cone(t, a)
             x, y = np.round(x), np.round(y)
-            cilinder_points.append((x, y, z))
-    cilinder_points = list(set(cilinder_points))
-    for x, y, z in cilinder_points:
+            cone_points.append((x, y, z))
+    cone_points = list(set(cone_points))
+    for x, y, z in cone_points:
         points.append((x, y, z))
         colors.append((255, 255, 0))
 

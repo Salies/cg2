@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         rotLayout.addWidget(self.radioZ, 0, 2)
         # Na linha de baixo, os spinbox
         self.deg = QSpinBox()
-        self.deg.setRange(0, 360)
+        self.deg.setRange(-360, 360)
         self.deg.setValue(30)
         rotLayout.addWidget(self.deg, 1, 0, 1, 2)
         # Um label dizendo "graus"
