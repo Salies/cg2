@@ -125,64 +125,48 @@ class Ramp:
             colors.extend([basic_colors[i]] * len(b))
         # Converte para numpy array
         self.points = np.array(points)
+        # Adiciona uma coluna de 1s para coordenadas homogêneas
+        self.points = np.hstack((self.points, np.ones((len(self.points), 1))))
         self.colors = np.array(colors)
 
     def to_img(self):
         # Cria o ZBuffer
-        z = ZBuffer((400, 400), 200, 200)
+        zb = ZBuffer((400, 400), 200, 200)
         # Para cada ponto, passa para o ZBuffer
         for i in range(len(self.points)):
-            z.set_point(*self.points[i], self.colors[i])
+            x, y, z, _ = self.points[i]
+            color = self.colors[i]
+            zb.set_point(x, y, z, color)
         # Retorna a imagem
-        return z.to_img()
+        return zb.to_img()
 
-    def rotate_x(self, deg):
+    # Rotações
+    def rotate_x(self, g):
         T = np.array([
-            [1, 0, 0],
-            [0, np.cos(deg), -np.sin(deg)],
-            [0, np.sin(deg), np.cos(deg)]
+            [1, 0, 0, 0],
+            [0, np.cos(g), -np.sin(g), 0],
+            [0, np.sin(g), np.cos(g), 0],
+            [0, 0, 0, 1]
         ])
         self.points = self.points @ T
 
-    def rotate_y(self, deg):
+    def rotate_y(self, g):
         T = np.array([
-            [np.cos(deg), 0, np.sin(deg)],
-            [0, 1, 0],
-            [-np.sin(deg), 0, np.cos(deg)]
+            [np.cos(g), 0, np.sin(g), 0],
+            [0, 1, 0, 0],
+            [-np.sin(g), 0, np.cos(g), 0],
+            [0, 0, 0, 1]
         ])
         self.points = self.points @ T
 
-    def rotate_z(self, deg):
+    def rotate_z(self, g):
         T = np.array([
-            [np.cos(deg), -np.sin(deg), 0],
-            [np.sin(deg), np.cos(deg), 0],
-            [0, 0, 1]
+            [np.cos(g), -np.sin(g), 0, 0],
+            [np.sin(g), np.cos(g), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
         ])
         self.points = self.points @ T
 
-
-
-t = Ramp()
-im = t.to_img()
-im.show()
-
-'''
-# Teste
-ret_test = [
-    (0, 0, 0),
-    (20, 0, 0),
-    (0, 20, 0),
-    (20, 20, 0)
-]
-
-ret_test2 = [
-    [20, 0, 80],
-    [20, 40, 80],
-    [100, 0, 0],
-    [100, 40, 0]
-]
-
-ret_test = np.array(ret_test2)
-
-print(bilinear(ret_test[0], ret_test[1], ret_test[2], ret_test[3]).shape)
-'''
+a = Ramp()
+a.to_img().show()
