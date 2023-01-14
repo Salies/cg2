@@ -169,4 +169,5 @@ class Ramp:
         self.points = self.points @ T
 
 a = Ramp()
+a.rotate_x(np.pi / 12)
 a.to_img().show()
