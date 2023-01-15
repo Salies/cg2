@@ -24,6 +24,7 @@ def sweep(points):
 
     # Rotacionando cada ponto, e já desenhando no ZBuffer
     zb = ZBuffer((401, 400))
+    # Aqui pulamos alguns pontos propositalmente para uma melhor visualização do objeto
     for i in range(0, len(points), 4):
         p = points[i]
         for g in np.linspace(0, 2 * np.pi, 360):
