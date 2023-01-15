@@ -19,13 +19,14 @@ def rotate_point(p, g):
 img = Image.new('L', (401, 400), 255)
 draw = ImageDraw.Draw(img)
 draw.line((200, 0, 200, 400), fill=0, width=1)
+#img.save('img/sweep-bg.png')
 
 arr = np.full((400, 401), 255)
 img = Image.open('sweeptest.png').convert('L')
 # Isolate the black pixels on the right side of the image
 # and mark them in the array
 for i in range(400):
-    for j in range(201, 401):
+    for j in range(401):
         if img.getpixel((j, i)) == 0:
             arr[i][j] = 0
 
@@ -73,11 +74,11 @@ zb = ZBuffer((401, 400))
                 zb.set_point(x + 200, i, -z, 0)
                 zb.set_point(z + 200, i, -x, 0)'''
 
-for i in range(0, 400, 5):
+for i in range(0, 400, 2):
     for j in range(400):
         if arr[i, j] == 0:
             p = (abs(200 - j), i, 0, 1)
-            for g in np.linspace(0, 2 * np.pi, 360):
+            for g in np.linspace(0, 2 * np.pi, 900):
                 T = np.array([
                     [np.cos(g), 0, np.sin(g), 0],
                     [0, 1, 0, 0],
