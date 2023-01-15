@@ -46,11 +46,7 @@ class Illumination:
         observer = (0, 0, 100)
         self.sphere_color = np.array([255, 0, 255])
         self.plane_color = np.array([0, 0, 255])
-        self.Kd_sphere = 0.3
-        self.Kd_plane = 0.7
-        self.Ks_sphere = 0.8
-        self.Ks_plane = 0.4
-
+        
         # O alpha é sempre o mesmo porque o observador está sempre na mesma posição
         cos_alpha = np.dot(observer, self.light) / (np.linalg.norm(observer) * np.linalg.norm(self.light))
         self.alpha = np.arccos(cos_alpha)
@@ -59,7 +55,7 @@ class Illumination:
         return np.dot(normal, self.light) / (np.linalg.norm(normal) * np.linalg.norm(self.light))
 
     # Devolve uma imagem iluminada (ambiente e difusa)
-    def ilu_a(self, Ia, Ka, Il):
+    def ilu_a(self, Ia, Ka, Il, Kd_shpere, Kd_plane):
         zb = ZBuffer((300, 300), 150)
         for p in self.sphere_points:
             # Calcula a normal da esfera no ponto (é o próprio ponto)
@@ -67,7 +63,7 @@ class Illumination:
             # Calcula o cosseno do ângulo entre a normal e a luz
             cos_theta = self._get_cos(normal)
             # Calcula a intensidade do ponto
-            i = ilu_d(Ia, Ka, Il, self.Kd_sphere, cos_theta)
+            i = ilu_d(Ia, Ka, Il, Kd_shpere, cos_theta)
             # Ajusta a cor do ponto
             c = self.sphere_color * i
             # Desenha o ponto
@@ -80,7 +76,7 @@ class Illumination:
             # Calcula o cosseno do ângulo entre a normal e a luz
             cos_theta = self._get_cos(normal)
             # Calcula a intensidade do ponto
-            i = ilu_d(Ia, Ka, Il, self.Kd_plane, cos_theta)
+            i = ilu_d(Ia, Ka, Il, Kd_plane, cos_theta)
             # Ajusta a cor do ponto
             c = self.plane_color * i
             # Desenha o ponto
@@ -88,14 +84,15 @@ class Illumination:
 
         return zb.to_img()
 
-    def ilu_b(self, Ia, Ka, Il, K, n):
+    # Iluminação ambiente, difusa e especular
+    def ilu_b(self, Ia, Ka, Il, K, n, Kd_sphere, Kd_plane, Ks_sphere, Ks_plane):
         zb = ZBuffer((300, 300), 150)
         for p in self.sphere_points:
             normal = p
             cos_theta = self._get_cos(normal)
             cos_alpha = np.cos(self.alpha - 2 * np.arccos(cos_theta))
             d = np.linalg.norm(p - self.light)
-            i = ilu_ds(Ia, Ka, Il, d, K, self.Kd_sphere, cos_theta, self.Ks_sphere, cos_alpha, n)
+            i = ilu_ds(Ia, Ka, Il, d, K, Kd_sphere, cos_theta, Ks_sphere, cos_alpha, n)
             c = self.sphere_color * i
             zb.set_point(*p, c)
 
@@ -105,9 +102,19 @@ class Illumination:
             cos_theta = self._get_cos(normal)
             cos_alpha = np.cos(self.alpha - 2 * np.arccos(cos_theta))
             d = np.linalg.norm(p - self.light)
-            i = ilu_ds(Ia, Ka, Il, d, K, self.Kd_plane, cos_theta, self.Ks_plane, cos_alpha, n)
+            i = ilu_ds(Ia, Ka, Il, d, K, Kd_plane, cos_theta, Ks_plane, cos_alpha, n)
             c = self.plane_color * i
             zb.set_point(*p, c)
 
         return zb.to_img()
             
+    # Devolve uma imagem sem iluminação
+    def no_ilu(self):
+        zb = ZBuffer((300, 300), 150)
+        for p in self.sphere_points:
+            zb.set_point(*p, self.sphere_color)
+
+        for p in self.plane_points:
+            zb.set_point(*p, self.plane_color)
+
+        return zb.to_img()
