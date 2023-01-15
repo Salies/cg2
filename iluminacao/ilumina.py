@@ -49,16 +49,25 @@ for p in sphere_points:
     # Calcula a normal da esfera no ponto (é o próprio ponto)
     normal = p
     # Calcula o cosseno do ângulo entre a normal e a luz
-    theta = np.dot(normal, light) / (np.linalg.norm(normal) * np.linalg.norm(light))
+    cos_theta = np.dot(normal, light) / (np.linalg.norm(normal) * np.linalg.norm(light))
     # Calcula a intensidade do ponto
-    i = ilu_d(1.0, 0.5, 1, 0.3, theta)
+    i = ilu_d(1.0, 0.5, 1, 0.3, cos_theta)
     # Ajusta a cor do ponto
     c = color * i
     zb.set_point(*p, c)
 
-'''for p in plane_points:
+color = np.array([0, 0, 255])
+for p in plane_points:
+    x, y, _ = p
+    # Calcula a normal do plano no ponto (é o vetor (0, 0, 1))
+    # A normal do plano é sempre (0, 0, 1)
+    normal_plane = np.array([x, y, 1])
+    # Calcula o cosseno do ângulo entre a normal e a luz
+    cos_theta = np.dot(normal_plane, light) / (np.linalg.norm(normal_plane) * np.linalg.norm(light))
+    # Calcula a intensidade do ponto
+    i = ilu_d(1.0, 0.5, 1, 0.7, cos_theta)
     # O plano é azul
-    color = (0, 0, 255)
-    zb.set_point(*p, color)'''
+    c = color * i
+    zb.set_point(*p, c)
 
 zb.to_img().show()
