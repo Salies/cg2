@@ -43,13 +43,13 @@ class MainWindow(QMainWindow):
         # Criando as spinboxes
         self.ia = QDoubleSpinBox()
         self.ia.setRange(0, 1000)
-        self.ia.setValue(100)
+        self.ia.setValue(0.8)
         self.ka = QDoubleSpinBox()
         self.ka.setRange(0, 1000)
-        self.ka.setValue(100)
+        self.ka.setValue(0.5)
         self.il = QDoubleSpinBox()
         self.il.setRange(0, 1000)
-        self.il.setValue(100)
+        self.il.setValue(0.8)
         self.kd_sphere = QDoubleSpinBox()
         self.kd_sphere.setRange(0, 1000)
         self.kd_sphere.setValue(0.3)
@@ -64,10 +64,10 @@ class MainWindow(QMainWindow):
         self.ks_plane.setValue(0.4)
         self.n = QDoubleSpinBox()
         self.n.setRange(0, 1000)
-        self.n.setValue(100)
+        self.n.setValue(10)
         self.k = QDoubleSpinBox()
         self.k.setRange(0, 1000)
-        self.k.setValue(100)
+        self.k.setValue(10)
 
         # Grupo: constantes objetos
         group_const_obj = QGroupBox("Constantes (objetos)")
@@ -126,3 +126,15 @@ class MainWindow(QMainWindow):
         # Botão de iluminar
         ilu = QPushButton("Iluminar")
         layout.addWidget(ilu, 4, 3)
+        ilu.clicked.connect(self.illuminate)
+
+    def illuminate(self):
+        if self.ad.isChecked():
+            im = self.ilu.ilu_a(self.ia.value(), self.ka.value(), self.il.value(), self.kd_sphere.value(), self.kd_plane.value())
+        elif self.ads.isChecked():
+            im = self.ilu.ilu_b(
+                self.ia.value(), self.ka.value(), self.il.value(), self.k.value(), self.n.value(),
+                self.kd_sphere.value(), self.kd_plane.value(), 
+                self.ks_sphere.value(), self.ks_plane.value()
+            )
+        self.label.setPixmap(QPixmap.fromImage(ImageQt.ImageQt(im)))
