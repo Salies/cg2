@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 from PySide6.QtGui import QPaintDevice, QPainter, QPen, QBrush, QColor, QImage, QPixmap, QPainterPath
 from Canvas import Canvas
+import numpy as np
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -14,5 +15,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(draw)
 
     def setPath(self, path):
-        self.path = path
+        # Tratando os pontos (apenas os pares únicos)
+        path = np.unique(np.array(path), axis=0)
         print(path)
+        self.path = path
