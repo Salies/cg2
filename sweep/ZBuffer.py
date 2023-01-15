@@ -10,10 +10,11 @@ class ZBuffer:
         self.buffer = np.full((x, y), np.inf, dtype=np.float32)
     
     def set_point(self, x, y, z, color):
+
         x = np.round(x).astype(int)
         y = np.round(y).astype(int)
 
-        if x < 0 or x > 400 or y < 0 or y > 399:
+        if x < 0 or x > 399 or y < 0 or y > 399:
             return
 
         if z >= self.buffer[y, x]:

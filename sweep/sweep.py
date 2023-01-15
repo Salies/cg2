@@ -44,7 +44,7 @@ for i in range(400):
 # For each pixel, we need to check if it is black and if it is, we rotate
 # the pixel 360 degrees on the y axis and draw each rotation.
 zb = ZBuffer((401, 400))
-for i in range(0, 400, 5):
+'''for i in range(0, 400, 5):
     for j in range(400):
         if arr[i][j] == 0:
             r = np.abs(200 - j)
@@ -71,6 +71,22 @@ for i in range(0, 400, 5):
                 zb.set_point(-x + 200, i, -z, 0)
                 zb.set_point(-z + 200, i, -x, 0)
                 zb.set_point(x + 200, i, -z, 0)
-                zb.set_point(z + 200, i, -x, 0)
+                zb.set_point(z + 200, i, -x, 0)'''
+
+for i in range(0, 400, 5):
+    for j in range(400):
+        if arr[i, j] == 0:
+            p = (abs(200 - j), i, 0, 1)
+            for g in np.linspace(0, 2 * np.pi, 360):
+                T = np.array([
+                    [np.cos(g), 0, np.sin(g), 0],
+                    [0, 1, 0, 0],
+                    [-np.sin(g), 0, np.cos(g), 0],
+                    [0, 0, 0, 1]
+                ])
+                p = p @ T
+                x, y, z, _ = p
+                zb.set_point(x + 200, y, z, 0)
+
 
 zb.to_img().show()
