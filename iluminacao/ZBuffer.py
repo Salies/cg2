@@ -13,7 +13,7 @@ class ZBuffer:
         self.buffer = np.full((x, y), np.inf, dtype=np.float32)
     
     def set_point(self, x, y, z, color):
-        x, y = np.round(x + self.offset).astype(int), np.round(self.offset - y).astype(int)
+        x, y = int(x + self.offset), int(self.offset - y)
         # Invertendo x e y pois os objetos são dados em
         # um plano cartesiano, mas aqui trata-se de uma imagem.
         # Checando se o ponto está dentro da imagem
