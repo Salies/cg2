@@ -23,6 +23,5 @@ class ZBuffer:
         self.mm[y, x] = color
 
     def to_img(self):
-        print(self.mm)
         im = Image.fromarray(self.mm)
         return im
