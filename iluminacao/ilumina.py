@@ -8,8 +8,9 @@ def sphere(a, b):
     return 50 * np.cos(a) * np.cos(b), 50 * np.sin(a) * np.cos(b), 50 * np.sin(b)
 
 # Função para iluminar um ponto usando a iluminação ambiente e a componente difusa
-def ilu_d(Ia, Ka, Il, Kd, theta):
-    return Ia * Ka + Il * Kd * np.cos(theta)
+# Retorna a intensidade do ponto
+def ilu_d(Ia, Ka, Il, Kd, cos_theta):
+    return Ia * Ka + Il * Kd * cos_theta
 
 sphere_points = np.empty((395641, 3))
 plane_points = np.empty((10000, 3))
@@ -38,12 +39,26 @@ plane_points = np.array(plane_points, dtype=int)
 
 zb = ZBuffer((300, 300), 150)
 
-for p in sphere_points:
-    # A esfera é magenta
-    zb.set_point(*p, (255, 0, 255))
+# Preparando a iluminação
+light = (100, 0, 100)
+observer = (0, 0, 100)
 
-for p in plane_points:
+# A esfera é magenta
+color = np.array([255, 0, 255])
+for p in sphere_points:
+    # Calcula a normal da esfera no ponto (é o próprio ponto)
+    normal = p
+    # Calcula o cosseno do ângulo entre a normal e a luz
+    theta = np.dot(normal, light) / (np.linalg.norm(normal) * np.linalg.norm(light))
+    # Calcula a intensidade do ponto
+    i = ilu_d(1.0, 0.5, 1, 0.3, theta)
+    # Ajusta a cor do ponto
+    c = color * i
+    zb.set_point(*p, c)
+
+'''for p in plane_points:
     # O plano é azul
-    zb.set_point(*p, (0, 0, 255))
+    color = (0, 0, 255)
+    zb.set_point(*p, color)'''
 
 zb.to_img().show()
