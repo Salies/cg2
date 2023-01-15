@@ -1,6 +1,8 @@
 import numpy as np
 from PIL import Image
 
+# Mesma classe de ZBuffer do trabalho dos objetos
+# Copiada aqui por conveniência
 class ZBuffer:
     def __init__(self, size, offset) -> None:
         x, y = size
@@ -11,10 +13,11 @@ class ZBuffer:
         self.buffer = np.full((x, y), np.inf, dtype=np.float32)
     
     def set_point(self, x, y, z, color):
-        x, y = x + self.offset, self.offset - y
+        x, y = int(x + self.offset), int(self.offset - y)
         # Invertendo x e y pois os objetos são dados em
         # um plano cartesiano, mas aqui trata-se de uma imagem.
-        if x > 300 or y < 0:
+        # Checando se o ponto está dentro da imagem
+        if x < 0 or x > 299 or y < 0 or y > 299:
             return
 
         if z >= self.buffer[y, x]:
