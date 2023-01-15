@@ -1,7 +1,7 @@
 from edge_fill import EdgeFill
 from flood_fill import flood_fill, flood_fill_eight
 from PySide6.QtWidgets import QMainWindow, QColorDialog, QRadioButton, QGroupBox, QWidget, QHBoxLayout, QGridLayout, QLabel, QPushButton
-from PySide6.QtGui import QPixmap, QColor
+from PySide6.QtGui import QPixmap, QColor, QIcon
 from PIL import ImageQt, Image
 import numpy as np
 
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.buildFloodFillWidget()
         self.buildEdgeFillWidget()
+        self.setWindowIcon(QIcon('ico/BTLPANEL.BIN_11.png'))
 
     def floodfill_drawimage(self):
         imQt = ImageQt.ImageQt(self.floodfill_im)

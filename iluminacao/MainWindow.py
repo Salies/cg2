@@ -1,6 +1,6 @@
 from Illumination import Illumination
 from PySide6.QtWidgets import QMainWindow, QWidget, QLabel, QGroupBox, QGridLayout, QPushButton, QDoubleSpinBox, QRadioButton
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QIcon
 from PySide6.QtCore import Qt
 from PIL import ImageQt
 
@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Iluminação")
+        self.setWindowIcon(QIcon("ico/BTLPANEL.BIN_1.png"))
 
         widget = QWidget()
         self.setCentralWidget(widget)

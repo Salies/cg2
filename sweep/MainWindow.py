@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QPushButton
-from PySide6.QtGui import QPixmap, QFont
+from PySide6.QtGui import QPixmap, QFont, QIcon
 from Canvas import Canvas
 import numpy as np
 from sweep import sweep
@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Varredura rotacional")
+        self.setWindowIcon(QIcon("ico/BTLPANEL.BIN_13.png"))
         widget = QWidget()
         self.setCentralWidget(widget)
         self.layout = QHBoxLayout()
@@ -32,6 +33,9 @@ class MainWindow(QMainWindow):
         self.path = path
 
     def doSweep(self):
+        # Se não há path, retorna
+        if not hasattr(self, "path"):
+            return
         # Executando a varredura
         img = sweep(self.path)
         # Exibindo a imagem resultante

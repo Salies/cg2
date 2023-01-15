@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget, QLabel, QGroupBox, QRadioButton, QPushButton, QSpinBox
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QIcon
 from bilinear import Ramp
 from PIL import Image, ImageQt
 from numpy import radians
@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Superfícies bilineares")
+        self.setWindowIcon(QIcon("ico/BTLPANEL.BIN_3.png"))
         # Criando o layout e widget principais
         layout = QGridLayout()
         widget = QWidget()

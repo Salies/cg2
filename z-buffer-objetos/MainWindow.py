@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton, QGridLayout, QHBoxLayout, QRadioButton, QWidget, QLabel, QSpinBox, QGroupBox
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QIcon
 from Objects import Objects
 from PIL import ImageQt
 from numpy import radians
@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Z-Buffer - Objetos")
+        self.setWindowIcon(QIcon("ico/BTLPANEL.BIN_5.png"))
         centralLayout = QHBoxLayout()
         centralWidget = QWidget(self)
         # Primeiro o label para exibir a imagem
