@@ -64,10 +64,10 @@ class MainWindow(QMainWindow):
         self.ks_plane.setValue(0.4)
         self.n = QDoubleSpinBox()
         self.n.setRange(0, 1000)
-        self.n.setValue(10)
+        self.n.setValue(2)
         self.k = QDoubleSpinBox()
         self.k.setRange(0, 1000)
-        self.k.setValue(10)
+        self.k.setValue(2)
 
         # Grupo: constantes objetos
         group_const_obj = QGroupBox("Constantes (objetos)")

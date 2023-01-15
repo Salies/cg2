@@ -46,10 +46,9 @@ class Illumination:
         observer = (0, 0, 100)
         self.sphere_color = np.array([255, 0, 255])
         self.plane_color = np.array([0, 0, 255])
-        
+
         # O alpha é sempre o mesmo porque o observador está sempre na mesma posição
-        cos_alpha = np.dot(observer, self.light) / (np.linalg.norm(observer) * np.linalg.norm(self.light))
-        self.alpha = np.arccos(cos_alpha)
+        self.cos_alpha = np.dot(observer, self.light) / (np.linalg.norm(observer) * np.linalg.norm(self.light))
 
     def _get_cos(self, normal):
         return np.dot(normal, self.light) / (np.linalg.norm(normal) * np.linalg.norm(self.light))
@@ -90,9 +89,8 @@ class Illumination:
         for p in self.sphere_points:
             normal = p
             cos_theta = self._get_cos(normal)
-            cos_alpha = np.cos(self.alpha - 2 * np.arccos(cos_theta))
             d = np.linalg.norm(p - self.light)
-            i = ilu_ds(Ia, Ka, Il, d, K, Kd_sphere, cos_theta, Ks_sphere, cos_alpha, n)
+            i = ilu_ds(Ia, Ka, Il, d, K, Kd_sphere, cos_theta, Ks_sphere, self.cos_alpha, n)
             c = self.sphere_color * i
             zb.set_point(*p, c)
 
@@ -100,9 +98,8 @@ class Illumination:
             x, y, _ = p
             normal = np.array([x, y, 1])
             cos_theta = self._get_cos(normal)
-            cos_alpha = np.cos(self.alpha - 2 * np.arccos(cos_theta))
             d = np.linalg.norm(p - self.light)
-            i = ilu_ds(Ia, Ka, Il, d, K, Kd_plane, cos_theta, Ks_plane, cos_alpha, n)
+            i = ilu_ds(Ia, Ka, Il, d, K, Kd_plane, cos_theta, Ks_plane, self.cos_alpha, n)
             c = self.plane_color * i
             zb.set_point(*p, c)
 
