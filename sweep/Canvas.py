@@ -1,14 +1,22 @@
 from PySide6 import QtGui, QtCore, QtWidgets
 
-class DrawWidget(QtWidgets.QWidget):
-    def __init__(self):
-        super(DrawWidget, self).__init__()
+class Canvas(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super(Canvas, self).__init__()
+        self.parent = parent
         self.setFixedSize(401, 400)
         self.setWindowTitle('Draw')
         self.brush_size = 1
         self.brush_color = QtCore.Qt.black
         self.last_point = QtCore.QPoint()
         self.path = QtGui.QPainterPath()
+        # Coloca a imagem com o eixo de fundo
+        self.image = QtGui.QImage("img/sweep-bg.png")
+        self.scaled_image = self.image.scaled(self.size())
+        self.setAutoFillBackground(True)
+        p = self.palette()
+        p.setBrush(QtGui.QPalette.Window, QtGui.QBrush(self.scaled_image))
+        self.setPalette(p)
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
@@ -27,4 +35,13 @@ class DrawWidget(QtWidgets.QWidget):
             self.update()
 
     def mouseReleaseEvent(self, event):
-        pass
+        # Extraindo todos os pontos do desenho
+        points = []
+        for i in range(self.path.elementCount()):
+            el = self.path.elementAt(i)
+            if el.type == QtGui.QPainterPath.MoveToElement:
+                points.append((el.x, el.y))
+            elif el.type == QtGui.QPainterPath.LineToElement:
+                points.append((el.x, el.y))
+        # Enviando os pontos para o MainWindow
+        self.parent.setPath(points)
