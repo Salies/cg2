@@ -56,7 +56,7 @@ def build_objects():
     # Esfera verde
     sphere_points = []
     for a in np.linspace(0, 2 * np.pi, 200):
-        for b in np.linspace(0, np.pi, 200):
+        for b in np.linspace(0, 2 * np.pi, 200):
             x, y, z = sphere(a, b)
             x, y = np.round(x), np.round(y)
             sphere_points.append((x, y, z))
